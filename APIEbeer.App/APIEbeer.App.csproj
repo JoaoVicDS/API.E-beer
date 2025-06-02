@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -6,7 +6,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  <ItemGroup>
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
+	<ItemGroup>
 	<ProjectReference Include="..\APIEbeer.Controllers\APIEbeer.Controllers.csproj" />
 	<ProjectReference Include="..\APIEbeer.Services\APIEbeer.Services.csproj" />
     <ProjectReference Include="..\APIEbeer.Shared\APIEbeer.Shared.csproj" />

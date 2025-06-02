@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using APIEbeer.App.Models;
+using APIEbeer.Shared.ViewModels;
 
 namespace APIEbeer.App.Controllers;
 
