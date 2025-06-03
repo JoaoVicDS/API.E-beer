@@ -15,4 +15,5 @@
 	  <ProjectReference Include="..\APIEbeer.Shared\APIEbeer.Shared.csproj" />
 	</ItemGroup>
 	
+	
 </Project>
