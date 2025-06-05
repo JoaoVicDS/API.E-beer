@@ -10,7 +10,7 @@ namespace APIEbeer.Services.Form
         private readonly ResponseOptionsModel _responseOptionsModel = responseOptionsModel;
 
         // Generates a dynamic form based on the characteristics of the provided model.
-        public List<string> GenerateDynamicForm(ItemViewModel model)
+        public FormViewModel GenerateDynamicForm(ItemViewModel model)
         {
             // Validate the input model
             var characteristics = model.Characteristics;
@@ -18,9 +18,26 @@ namespace APIEbeer.Services.Form
             {
                 throw new ArgumentException("The model must contain characteristics to generate a form.");
             }
-            
+
+            // Generate the questions based on the characteristics
+            List<QuestionsViewModel> questions = GenerateQuestions(characteristics);
+
+            // If no questions were generated, throw an exception
+            if (questions == null || questions.Count < 0)
+            {
+                throw new ArgumentException("The questions must contain questions and response options.");
+            }
+
+            // Create the FormViewModel
+            var forms = new FormViewModel
+            {
+                Questions = questions
+            };
+
+            return forms;
         }
 
+        // Generates a list of questions based on the characteristics provided in the model.
         private List<QuestionsViewModel> GenerateQuestions(Dictionary<string, string> characteristics)
         {
             // Create a list to hold the form questions
@@ -54,13 +71,13 @@ namespace APIEbeer.Services.Form
 
                 // Construct the option property name based on the question property name
                 var optionName = $"Options{questionProp.Name}";
-                // Check if the options property exists in OptionsResponseModel
+                // Check if the options property exists in OptionsResponseModel and save it in optionProp
                 if (!optionsProperties.TryGetValue(optionName, out var optionProp))
                 {
                     continue; // Skip if no matching options property found
                 }
 
-                // Get the value of the options property
+                // Get the value of the options property and try convert it to a List<string>
                 var options = optionProp.GetValue(_responseOptionsModel) as List<string>;
                 // Ensure options are not null or empty
                 if (options == null || options.Count == 0)

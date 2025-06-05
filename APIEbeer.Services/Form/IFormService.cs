@@ -4,6 +4,6 @@ namespace APIEbeer.Services.Form
 {
     public interface IFormService
     {
-        public List<string> GenerateDynamicForm(ItemViewModel model);
+        public FormViewModel GenerateDynamicForm(ItemViewModel model);
     }
 }
