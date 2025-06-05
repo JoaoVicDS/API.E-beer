@@ -1,4 +1,6 @@
 using APIEbeer.Controllers;
+using APIEbeer.Services.Json;
+using APIEbeer.Services.Form;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,10 @@ builder.Services.AddControllersWithViews();
 builder.Services
     .AddControllersWithViews()
     .AddApplicationPart(typeof(JsonController).Assembly);
+
+// Register services
+builder.Services.AddScoped<IJsonService, JsonService>();
+builder.Services.AddScoped<IFormService, FormService>();
 
 var app = builder.Build();
 
