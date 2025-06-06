@@ -15,18 +15,14 @@ namespace APIEbeer.Services.Form
             // Validate the input model
             var characteristics = model.Characteristics;
             if (characteristics == null || characteristics.Count < 0)
-            {
                 throw new ArgumentException("The model must contain characteristics to generate a form.");
-            }
 
             // Generate the questions based on the characteristics
             List<QuestionsViewModel> questions = GenerateQuestions(characteristics);
 
             // If no questions were generated, throw an exception
             if (questions == null || questions.Count < 0)
-            {
                 throw new ArgumentException("The questions must contain questions and response options.");
-            }
 
             // Create the FormViewModel
             var forms = new FormViewModel
@@ -58,32 +54,24 @@ namespace APIEbeer.Services.Form
                 var questionProp = questionsProperties
                     .FirstOrDefault(p => string.Equals(p.Name, characteristic.Key, StringComparison.OrdinalIgnoreCase));
                 if (questionProp == null)
-                {
                     continue; // Skip if no matching question property found
-                }
 
                 // Get the value of the question property
                 var questionText = questionProp.GetValue(_questionsModel)?.ToString();
                 if (string.IsNullOrWhiteSpace(questionText))
-                {
                     continue; // Skip if question text is null or empty
-                }
 
                 // Construct the option property name based on the question property name
                 var optionName = $"Options{questionProp.Name}";
                 // Check if the options property exists in OptionsResponseModel and save it in optionProp
                 if (!optionsProperties.TryGetValue(optionName, out var optionProp))
-                {
                     continue; // Skip if no matching options property found
-                }
 
                 // Get the value of the options property and try convert it to a List<string>
                 var options = optionProp.GetValue(_responseOptionsModel) as List<string>;
                 // Ensure options are not null or empty
                 if (options == null || options.Count == 0)
-                {
                     continue; // Skip if options are null or empty
-                }
 
                 // Add the question and its options to the list
                 questions.Add(new QuestionsViewModel

@@ -10,7 +10,7 @@ builder.Services.AddControllersWithViews();
 // Add the JsonController to the application part manager
 builder.Services
     .AddControllersWithViews()
-    .AddApplicationPart(typeof(JsonController).Assembly);
+    .AddApplicationPart(typeof(FormController).Assembly);
 
 // Register services
 builder.Services.AddScoped<IJsonService, JsonService>();

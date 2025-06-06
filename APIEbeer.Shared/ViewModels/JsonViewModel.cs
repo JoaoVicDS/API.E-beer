@@ -13,7 +13,7 @@ namespace APIEbeer.Shared.ViewModels
 //   "menu": [
 //     {
 //       "category": "Bebidas",
-//       "itens": [
+//       "items": [
 //         {
 //           "nome": "Cerveja",
 //           "caracteristicas": {
@@ -25,7 +25,7 @@ namespace APIEbeer.Shared.ViewModels
 //     },
 //     {
 //       "category": "Entradas",
-//       "itens": [
+//       "items": [
 //         {
 //           "nome": "Picanha",
 //           "caracteristicas": {
