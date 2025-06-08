@@ -5,6 +5,5 @@ namespace APIEbeer.Services.Json
     public interface IJsonService
     {
         public (bool IsValid, string? ErrorMessage) ValidateJsonStructure(JsonViewModel? input);
-        public JsonViewModel? ParseJson(string json);
     }
 }

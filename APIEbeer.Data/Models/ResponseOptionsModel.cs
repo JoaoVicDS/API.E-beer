@@ -2,12 +2,12 @@
 {
     public class ResponseOptionsModel
     {
-        public List<string> OptionsBitterness { get; set; } = new List<string>
+        public List<string> OptionsBitter { get; set; } = new List<string>
         {
             "Leve", "Moderado", "Amargo", "Intenso"
         };
         
-        public List<string> OptionsSweetness { get; set; } = new List<string>
+        public List<string> OptionsSweet { get; set; } = new List<string>
         {
             "Baixo", "Equilibrado", "Alto"
         };
@@ -62,9 +62,19 @@
             "Com molho", "Sem molho"
         };
 
-        public List<string> OptionsSpiciness { get; set; } = new List<string>
+        public List<string> OptionsSpicy { get; set; } = new List<string>
         {
             "Sem ardência", "Leve", "Moderada", "Alta"
+        };
+
+        public List<string> OptionsSize { get; set; } = new List<string>
+        {
+            "Pequeno", "Médio", "Grande"
+        };
+
+        public List<string> OptionsVolume { get; set; } = new List<string>
+        {
+            "269ml", "350ml", "355ml", "473ml", "600ml", "1L"
         };
     }
 }

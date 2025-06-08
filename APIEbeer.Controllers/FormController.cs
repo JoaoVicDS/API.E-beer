@@ -2,7 +2,6 @@
 using APIEbeer.Services.Json;
 using APIEbeer.Shared.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 
 namespace APIEbeer.Controllers
 {
@@ -16,11 +15,8 @@ namespace APIEbeer.Controllers
         // POST: api/menu
         [Route("api/menu")]
         [HttpPost]
-        public IActionResult Index([FromBody] string json)
+        public IActionResult Index([FromBody] JsonViewModel model)
         {
-            // Parse the JSON string into a JsonViewModel object
-            JsonViewModel? model = ParseJson(json);
-
             if (model == null)
                 return BadRequest("JSON não pode ser nulo ou vazio");
 
@@ -33,19 +29,11 @@ namespace APIEbeer.Controllers
             if(model?.Menu == null)
                 return BadRequest("O campo 'menu' não pode ser nulo ou vazio.");
 
-            // Pick up the Items list
-            var items = model.Menu?
-                .SelectMany(m => m.Items)
-                .ToList();
-
-            if (items == null)
-                return BadRequest("O campo 'items' não pode ser nulo ou vazio.");
-
             // Create the dynamic form based on the JSON structure
-            FormViewModel form = _formService.GenerateDynamicForm(items);
+            FormViewModel form = _formService.GenerateDynamicForm(model.Menu);
 
             // Return to the view with the form
-            return View(form);
+            return Ok(form);
         }
 
         private (bool IsValid, string? ErrorMessage) ValidateJsonStructure(JsonViewModel? model)
@@ -59,15 +47,6 @@ namespace APIEbeer.Controllers
                 return (false, ErrorMessage);
 
             return (true, null);
-        }
-
-        private JsonViewModel? ParseJson(string json)
-        {
-            // Verify if the input JSON string is null or empty
-            if (string.IsNullOrWhiteSpace(json))
-                return null;
-
-            return _jsonService.ParseJson(json);
         }
     }
 
