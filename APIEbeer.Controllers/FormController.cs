@@ -35,7 +35,6 @@ namespace APIEbeer.Controllers
 
             // Pick up the Items list
             var items = model.Menu?
-                .Where(m => m.Items != null)
                 .SelectMany(m => m.Items)
                 .ToList();
 
