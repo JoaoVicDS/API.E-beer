@@ -2,6 +2,6 @@
 {
     public class FormViewModel
     {
-        public required List<QuestionsViewModel> Questions { get; set; }
+        public required List<FormCategoryViewModel> Categories { get; set; }
     }
 }
