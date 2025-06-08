@@ -1,7 +1,32 @@
+using APIEbeer.Controllers;
+using APIEbeer.Data.Models;
+using APIEbeer.Services.Form;
+using APIEbeer.Services.Json;
+using APIEbeer.Shared.ViewModels;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Add the JsonController to the application part manager
+builder.Services
+    .AddControllersWithViews()
+    .AddApplicationPart(typeof(FormController).Assembly);
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+    });
+
+// Register models as singletons
+builder.Services.AddSingleton<QuestionsModel>();
+builder.Services.AddSingleton<ResponseOptionsModel>();
+
+// Register services
+builder.Services.AddScoped<IJsonService, JsonService>();
+builder.Services.AddScoped<IFormService, FormService>();
 
 var app = builder.Build();
 
@@ -18,12 +43,6 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapStaticAssets();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
-
+app.MapControllers();
 
 app.Run();

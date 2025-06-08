@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+ 	<ItemGroup>
+	  <ProjectReference Include="..\APIEbeer.Shared\APIEbeer.Shared.csproj" />
+	  <ProjectReference Include="..\APIEbeer.Data\APIEbeer.Data.csproj" />
+	</ItemGroup>
+
 </Project>
