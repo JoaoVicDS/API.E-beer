@@ -2,8 +2,8 @@
 {
     public class QuestionsModel
     {
-        public string Bitterness { get; set; } = "Qual nível de amargor você prefere?";
-        public string Sweetness { get; set; } = "Qual nível de doçura você prefere?";
+        public string Bitter { get; set; } = "Qual nível de amargor você prefere?";
+        public string Sweeet { get; set; } = "Qual nível de doçura você prefere?";
         public string AlcoholContent { get; set; } = "Qual o teor alcoólico que você prefere?";
         public string Flavor { get; set; } = "Qual o sabor que você prefere?";
         public string Texture { get; set; } = "Qual a textura que você prefere?";
@@ -14,6 +14,8 @@
         public string Seasoning { get; set; } = "Qual o tempero que você prefere?";
         public string Acidity { get; set; } = "Qual o nível de acidez que você prefere?";
         public string SauceAndNoSauce { get; set; } = "Você prefere com molho ou sem molho?";
-        public string Spiciness { get; set; } = "Qual o nível de ardência que você prefere?";
+        public string Spicy { get; set; } = "Qual o nível de ardência que você prefere?";
+        public string Size { get; set; } = "Qual o tamanho que você prefere?";
+        public string Volume { get; set; } = "Qual o volume que você prefere?";
     }
 }

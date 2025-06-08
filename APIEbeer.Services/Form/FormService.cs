@@ -86,12 +86,12 @@ namespace APIEbeer.Services.Form
 
             // Use reflection to get the properties of the QuestionsModel
             var questionsProperties = _questionsModel.GetType().GetProperties()
-                .ToDictionary(p => p.Name, p => p);
+                .ToDictionary(p => p.Name, p => p, StringComparer.OrdinalIgnoreCase);
 
             // Use reflection to get the properties of the OptionsResponseModel
             var optionsProperties = _responseOptionsModel.GetType().GetProperties()
                 // Create a dictionary from the options properties for easy access
-                .ToDictionary(p => p.Name, p => p);
+                .ToDictionary(p => p.Name, p => p, StringComparer.OrdinalIgnoreCase);
 
             // Iterate through the characteristics and match them with the properties of QuestionsModel
             foreach (var characteristic in characteristics)
