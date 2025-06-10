@@ -13,11 +13,29 @@ namespace APIEbeer.Controllers
         private readonly IFormService _formService = formService;
         private readonly ICacheService _cacheService = cacheService;
 
-        // Route to receive and validate menuJson
+        // Route to return to Index View with form
+        // GET: api/form?formId={formId}
+        [HttpGet("api/form")]
+        public IActionResult Index([FromQuery] string formId)
+        {
+            // Getting the FormViewModel from cache
+            var form = _cacheService.Get<FormViewModel>($"formId:{formId}:FormViewModel");
+
+            // Checks if form is null
+            if (form == null)
+            {
+                return BadRequest($"Não foi possível localizar o formulário {formId}");
+            }
+
+            // Returns the JSON of the form
+            return Ok(form);
+        }
+
+        // Route to generate the form
         // POST: api/menu
         [Route("api/menu")]
         [HttpPost]
-        public IActionResult Index([FromBody] JsonViewModel model)
+        public IActionResult GenerateForm([FromBody] JsonViewModel model)
         {
             // Checks if the JsonViewModel is valid
             if (model == null)
@@ -37,7 +55,7 @@ namespace APIEbeer.Controllers
             if (string.IsNullOrEmpty(formId))
                 formId = $"{model.Restaurant}{model.Menu.Categories.Count}"; 
 
-            //Saves JsonViewModel in the cache
+            // Saves JsonViewModel in the cache
             _cacheService.Set<JsonViewModel>($"formId:{formId}:JsonViewModel", model);
 
             // Checks if the Menu is null or empty
@@ -51,11 +69,12 @@ namespace APIEbeer.Controllers
             if (form == null)
                 return BadRequest("Não foi possível gerar o formulário a partir do JSON fornecido.");
 
-            //Saves FormViewModel in the cache
+            // Saves FormViewModel in the cache
             _cacheService.Set<FormViewModel>($"formId:{formId}:FormViewModel", form);
 
-            // Return to the view with the form
-            return Ok(form);
+            // Redirect to Index
+            return RedirectToAction("Index", new { formId });
+
         }
 
         private (bool IsValid, string? ErrorMessage) ValidateJsonStructure(JsonViewModel? model)
