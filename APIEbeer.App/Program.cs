@@ -2,6 +2,7 @@ using APIEbeer.Controllers;
 using APIEbeer.Data.Models;
 using APIEbeer.Services.Form;
 using APIEbeer.Services.Json;
+using APIEbeer.Services.Cache;
 using APIEbeer.Shared.ViewModels;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +28,9 @@ builder.Services.AddSingleton<ResponseOptionsModel>();
 // Register services
 builder.Services.AddScoped<IJsonService, JsonService>();
 builder.Services.AddScoped<IFormService, FormService>();
+builder.Services.AddScoped<ICacheService, CacheService>();
+
+builder.Services.AddMemoryCache(); // Register memory cache service
 
 var app = builder.Build();
 
@@ -42,7 +46,13 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseStaticFiles();
 
 app.MapControllers();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
 
 app.Run();

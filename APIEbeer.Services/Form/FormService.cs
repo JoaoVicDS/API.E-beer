@@ -120,7 +120,8 @@ namespace APIEbeer.Services.Form
                 // Add the question and its options to the list
                 questions.Add(new FormQuestionsViewModel
                 {
-                    QuestionText = questionText,
+                    Characteristic = characteristic.Key,
+                    Question = questionText,
                     Options = options
                 });
                 

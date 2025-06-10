@@ -35,5 +35,10 @@ namespace APIEbeer.Services.Json
 
             return (true, null); // Estrutura válida
         }
+
+        public void CacheSaving(JsonViewModel model)
+        {
+
+        }
     }
 }
