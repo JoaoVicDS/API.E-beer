@@ -1,13 +1,13 @@
 ﻿@{
-	Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @{
-	ViewBag.Title = "Index";
+    ViewBag.Title = "Index";
 }
 
 @{
-	var questions = ViewBag.QuestionsList as List<string> ?? new List<string>();
+    var questions = ViewBag.QuestionsList as List<string> ?? new List<string>();
 }
 
 <h2 class="text-center  mt-3 mb-3">Welcome to E-beer Form</h2>
@@ -15,18 +15,19 @@
 
 <div id="question-container" class="d-flex justify-content-center text-center mt-3"></div>
 
-<script> 
-	const questions = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(questions));
-	let currentIndex = 0;
+<script>
 
-	function showQuestion(index) {
-		const container = document.getElementById('question-container');
-		if(index >= questions.length) {
-			container.innerHTML = "<p>Você respondeu todas as perguntas!</p>";
-			return;
-		}
+    const questions = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(questions));
+    let currentIndex = 0;
+
+    function showQuestion(index) {
+        const container = document.getElementById('question-container');
+        if(index >= questions.length) {
+            container.innerHTML = "<p>Você respondeu todas as perguntas!</p>";
+            return;
+        }
                 container.innerHTML = `
-            <div>a
+            <div>
                 <h3>${questions[index]}</h3>
                 <input type="text" id="answer" />
                 <button onclick="nextQuestion()">Responder</button>

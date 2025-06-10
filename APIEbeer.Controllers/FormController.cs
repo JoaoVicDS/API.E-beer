@@ -1,4 +1,5 @@
-﻿using APIEbeer.Services.Form;   
+﻿using APIEbeer.Data.Models;
+using APIEbeer.Services.Form;   
 using APIEbeer.Services.Json;
 using APIEbeer.Shared.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -47,6 +48,75 @@ namespace APIEbeer.Controllers
                 return (false, ErrorMessage);
 
             return (true, null);
+        }
+
+        // Route to visualize the form
+        [HttpGet("/formulario")]
+        public IActionResult Visualizar()
+        {
+            var questionsModel = new QuestionsModel();
+
+            var questionsList = new List<string>
+            {
+                questionsModel.Bitter,
+                questionsModel.Sweeet,
+                questionsModel.AlcoholContent,
+                questionsModel.Flavor,
+                questionsModel.Texture,
+                questionsModel.Color,
+                questionsModel.Carbonation,
+                questionsModel.PointOfMeat,
+                questionsModel.Temperature,
+                questionsModel.Seasoning,
+                questionsModel.Acidity,
+                questionsModel.SauceAndNoSauce,
+                questionsModel.Spicy,
+                questionsModel.Size,
+                questionsModel.Volume
+            };
+
+            // Carrega ou simula o JSON
+            var mock = new JsonViewModel
+            {
+                Restaurant = "E-beer",
+                Menu = new MenuViewModel
+                {
+                    Categories = new List<CategoryViewModel>
+            {
+                new CategoryViewModel
+                {
+                    Name = "Bebidas",
+                    Items = new List<ItemViewModel>
+                    {
+                        new ItemViewModel
+                        {
+                            Name = "Cerveja",
+                            Characteristics = new Dictionary<string, string>
+                            {
+                                { "Amargor", "Moderado" },
+                                { "Teor", "5%" }
+                            }
+                        }
+                    }
+                }
+            }
+                }
+            };
+
+            var (valid, error) = _jsonService.ValidateJsonStructure(mock);
+            if (!valid) return BadRequest(error);
+
+            ViewData["RestaurantName"] = mock.Restaurant;
+            ViewBag.QuestionsList = questionsList;
+
+            System.Diagnostics.Debug.WriteLine("Questions carregadas:");
+            foreach (var q in questionsList)
+            {
+                System.Diagnostics.Debug.WriteLine(q);
+            }
+
+            var form = _formService.GenerateDynamicForm(mock.Menu);
+            return View("Formulario", form); 
         }
     }
 

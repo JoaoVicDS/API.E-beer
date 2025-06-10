@@ -28,6 +28,8 @@ builder.Services.AddSingleton<ResponseOptionsModel>();
 builder.Services.AddScoped<IJsonService, JsonService>();
 builder.Services.AddScoped<IFormService, FormService>();
 
+builder.Services.AddMemoryCache(); // Register memory cache service
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -42,7 +44,13 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseStaticFiles();
 
 app.MapControllers();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
 
 app.Run();
