@@ -1,8 +1,10 @@
-﻿using APIEbeer.Services.Form;   
+﻿using APIEbeer.Services.Form;
 using APIEbeer.Services.Json;
 using APIEbeer.Services.Cache;
-using APIEbeer.Shared.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using APIEbeer.Shared.ViewModels.Form;
+using APIEbeer.Shared.ViewModels.JSON;
+using APIEbeer.Shared.ViewModels.Answers;
 
 namespace APIEbeer.Controllers
 {
@@ -75,6 +77,15 @@ namespace APIEbeer.Controllers
             // Redirect to Index
             return RedirectToAction("Index", new { formId });
 
+        }
+
+        [HttpPost("api/form/submit")]
+        public IActionResult ValidateAnswers([FromBody] AnswersViewModel answers)
+        {
+            if (_formService.ValidateAnswers(answers))
+                return BadRequest("As respostas recebidas pelo formulário estão incorretas");
+
+            return RedirectToAction("RecommendItem", "RecommendationController", new { answers });
         }
 
         private (bool IsValid, string? ErrorMessage) ValidateJsonStructure(JsonViewModel? model)

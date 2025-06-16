@@ -1,5 +1,8 @@
 ﻿using APIEbeer.Data.Models;
 using APIEbeer.Shared.ViewModels;
+using APIEbeer.Shared.ViewModels.Form;
+using APIEbeer.Shared.ViewModels.JSON;
+using APIEbeer.Shared.ViewModels.Answers;
 
 namespace APIEbeer.Services.Form
 {
@@ -85,11 +88,15 @@ namespace APIEbeer.Services.Form
             var questions = new List<FormQuestionsViewModel>();
 
             // Use reflection to get the properties of the QuestionsModel
-            var questionsProperties = _questionsModel.GetType().GetProperties()
+            var questionsProperties = _questionsModel
+                .GetType()
+                .GetProperties()
                 .ToDictionary(p => p.Name, p => p, StringComparer.OrdinalIgnoreCase);
 
             // Use reflection to get the properties of the OptionsResponseModel
-            var optionsProperties = _responseOptionsModel.GetType().GetProperties()
+            var optionsProperties = _responseOptionsModel
+                .GetType()
+                .GetProperties()
                 // Create a dictionary from the options properties for easy access
                 .ToDictionary(p => p.Name, p => p, StringComparer.OrdinalIgnoreCase);
 
@@ -124,9 +131,40 @@ namespace APIEbeer.Services.Form
                     Question = questionText,
                     Options = options
                 });
-                
+
             }
             return questions;
+        }
+
+        public bool ValidateAnswers(AnswersViewModel answers)
+        {
+            if (answers == null)
+                throw new ArgumentNullException(nameof(answers), "Answers cannot be null.");
+
+            foreach (var category in answers.Categories)
+            {
+                if(category.SelectedAnswers.Count == 0)
+                    throw new ArgumentException($"Category '{category.Name}' has no selected answers.");
+
+                foreach (var answer in category.SelectedAnswers)
+                {
+                    var characteristicAsked = answer.CharacteristicAsked;
+
+                    if (!_questionsModel.ValidateQuestionByCharacteristic(characteristicAsked ?? string.Empty))
+                        throw new ArgumentException($"Invalid characteristic asked: {characteristicAsked} in category '{category.Name}'.");
+
+                    var options = _responseOptionsModel.GetOptionsByCharacteristic(characteristicAsked ?? string.Empty);
+
+                    if (options.Count == 0)
+                        throw new ArgumentException($"The characteristic asked: {characteristicAsked} has no response options");
+
+                    if (!options.Contains(answer.SelectedOption))
+                        throw new ArgumentException($"One or more selected options are not valid for characteristic '{characteristicAsked}' in category '{category.Name}'.");
+                }
+
+            }
+
+            return true;
         }
     }
 }

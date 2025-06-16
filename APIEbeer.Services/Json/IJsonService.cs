@@ -1,4 +1,4 @@
-using APIEbeer.Shared.ViewModels;
+using APIEbeer.Shared.ViewModels.JSON;
 
 namespace APIEbeer.Services.Json
 {
