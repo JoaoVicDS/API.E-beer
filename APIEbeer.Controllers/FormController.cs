@@ -79,13 +79,13 @@ namespace APIEbeer.Controllers
 
         }
 
-        [HttpPost("api/form/submit")]
+        [HttpPost("api/submit/answers/form")]
         public IActionResult ValidateAnswers([FromBody] AnswersViewModel answers)
         {
             if (_formService.ValidateAnswers(answers))
                 return BadRequest("As respostas recebidas pelo formulário estão incorretas");
 
-            return RedirectToAction("RecommendItem", "RecommendationController", new { answers });
+            return RedirectToAction("Index", "RecommendationController", new { answers });
         }
 
         private (bool IsValid, string? ErrorMessage) ValidateJsonStructure(JsonViewModel? model)

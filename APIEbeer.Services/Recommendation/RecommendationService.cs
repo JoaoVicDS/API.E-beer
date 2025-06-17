@@ -10,22 +10,27 @@ namespace APIEbeer.Services.Recommendation
     {
         private readonly ResponseOptionsModel _responseOption = responseOption;
 
-        public RecommendationViewModel GenerateRecommendation(AnswersViewModel answers, List<ItemViewModel> items)
+        public RecommendationViewModel GenerateRecommendation(AnswersViewModel answers, List<CategoryViewModel> categories)
         {
             if (answers == null)
                 throw new ArgumentNullException(nameof(answers), "Answers cannot be null.");
 
-            if (items == null)
-                throw new ArgumentNullException(nameof(items), "Items cannot be null.");
+            if (categories == null)
+                throw new ArgumentNullException(nameof(categories), "Categories cannot be null.");
 
             var recommendationCategories = new List<RecommendationCategoryViewModel>();
 
-            foreach (var category in answers.Categories)
+            foreach (var answersCategory in answers.Categories)
             {
+                var category = categories.FirstOrDefault(c => c.Name == answersCategory.Name);
+                
+                if(category == null)
+                    throw new ArgumentNullException(nameof(category), $"Category {answersCategory.Name} not found in {categories}.");
+
                 RecommendationCategoryViewModel recommendationCategory = GenerateCategoryRecommendation(
-                    category.Name, 
-                    category.SelectedAnswers, 
-                    items);
+                    answersCategory.Name,
+                    answersCategory.SelectedAnswers, 
+                    category.Items);
 
                 if (recommendationCategory == null)
                     throw new ArgumentNullException(nameof(recommendationCategory), "Recommendation category cannot be null.");
