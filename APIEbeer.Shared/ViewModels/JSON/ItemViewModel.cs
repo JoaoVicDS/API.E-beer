@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace APIEbeer.Shared.ViewModels
+namespace APIEbeer.Shared.ViewModels.JSON
 {
     public class ItemViewModel
     {

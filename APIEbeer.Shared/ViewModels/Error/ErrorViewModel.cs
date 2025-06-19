@@ -1,4 +1,4 @@
-﻿namespace APIEbeer.Shared.ViewModels
+﻿namespace APIEbeer.Shared.ViewModels.Error
 {
     public class ErrorViewModel
     {

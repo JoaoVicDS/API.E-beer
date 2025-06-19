@@ -76,5 +76,12 @@
         {
             "269ml", "350ml", "355ml", "473ml", "600ml", "1L"
         };
+
+        public List<string> GetOptionsByCharacteristic(string characteristic)
+        {
+            var propertyName = $"Options{characteristic}";
+
+            return GetType().GetProperty(propertyName)?.GetValue(this) as List<string> ?? [];
+        }
     }
 }

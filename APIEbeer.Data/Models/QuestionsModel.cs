@@ -1,4 +1,6 @@
-﻿namespace APIEbeer.Data.Models
+﻿using System.Reflection;
+
+namespace APIEbeer.Data.Models
 {
     public class QuestionsModel
     {
@@ -17,5 +19,15 @@
         public string Spicy { get; set; } = "Qual o nível de ardência que você prefere?";
         public string Size { get; set; } = "Qual o tamanho que você prefere?";
         public string Volume { get; set; } = "Qual o volume que você prefere?";
+
+        public bool ValidateQuestionByCharacteristic(string characteristic)
+        {
+            var property = GetType().GetProperty(characteristic);
+            if (property == null)
+                return false;
+
+            return property.Name == characteristic;
+        }
     }
+
 }
