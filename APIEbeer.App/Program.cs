@@ -3,6 +3,7 @@ using APIEbeer.Data.Models;
 using APIEbeer.Services.Form;
 using APIEbeer.Services.Json;
 using APIEbeer.Services.Cache;
+using APIEbeer.Services.Recommendation;
 using APIEbeer.Shared.ViewModels;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,10 +11,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Add the JsonController to the application part manager
+// Add the FormController to the application part manager
 builder.Services
     .AddControllersWithViews()
-    .AddApplicationPart(typeof(FormController).Assembly);
+    .AddApplicationPart(typeof(FormController).Assembly)
+    .AddApplicationPart(typeof(RecommendationController).Assembly);
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -29,6 +31,7 @@ builder.Services.AddSingleton<ResponseOptionsModel>();
 builder.Services.AddScoped<IJsonService, JsonService>();
 builder.Services.AddScoped<IFormService, FormService>();
 builder.Services.AddScoped<ICacheService, CacheService>();
+builder.Services.AddScoped<IRecommendationService, RecommendationService>();
 
 builder.Services.AddMemoryCache(); // Register memory cache service
 

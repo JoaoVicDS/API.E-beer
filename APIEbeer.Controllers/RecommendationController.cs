@@ -7,14 +7,23 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace APIEbeer.Controllers
 {
+    [ApiController]
     public class RecommendationController(IRecommendationService recommendationService, ICacheService cacheService) : Controller
     {
         private readonly IRecommendationService _recommendationService = recommendationService;
         private readonly ICacheService _cacheService = cacheService;
 
-        public IActionResult Index()
+        [HttpGet("api/recommendation/index")]
+        public IActionResult Index([FromQuery] string formId)
         {
+            var recommendation = _cacheService.Get<RecommendationViewModel>($"formId:{formId}:RecommendationViewModel");
 
+            if (recommendation == null)
+            {
+                return BadRequest($"Não foi possível localizar a recomendação {formId}");
+            }
+
+            return Ok(recommendation);
         }
 
         [HttpPost("api/recommendation/generate")]
@@ -35,7 +44,7 @@ namespace APIEbeer.Controllers
 
             _cacheService.Set<RecommendationViewModel>($"formId:{answers.FormId}:RecommendationViewModel", recommendation);
 
-            return RedirectToAction("Index", new { answers.FormId });
+            return Ok();
         }   
     }
 }

@@ -30,7 +30,7 @@ namespace APIEbeer.Controllers
             }
 
             // Returns the JSON of the form
-            return Ok(form);
+            return Ok(new { formId, form });
         }
 
         // Route to generate the form
@@ -85,7 +85,7 @@ namespace APIEbeer.Controllers
             if (_formService.ValidateAnswers(answers))
                 return BadRequest("As respostas recebidas pelo formulário estão incorretas");
 
-            return RedirectToAction("Index", "RecommendationController", new { answers });
+            return RedirectToAction("GenerateRecommendation", "RecommendationController", new { answers });
         }
 
         private (bool IsValid, string? ErrorMessage) ValidateJsonStructure(JsonViewModel? model)

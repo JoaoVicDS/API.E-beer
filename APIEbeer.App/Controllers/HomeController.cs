@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using APIEbeer.Shared.ViewModels;
+using APIEbeer.Shared.ViewModels.Error;
 
 namespace APIEbeer.App.Controllers;
 
