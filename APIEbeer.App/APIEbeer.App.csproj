@@ -15,9 +15,4 @@
 	</ItemGroup>
 	
 	<!-- Esta parte garante que arquivos da wwwroot sejam publicados -->
-	<ItemGroup>
-		<Content Update="wwwroot\**\*">
-			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		</Content>
-	</ItemGroup>
 </Project>
