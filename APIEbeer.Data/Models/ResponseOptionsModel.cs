@@ -1,4 +1,4 @@
-﻿namespace APIEbeer.Shared.ViewModels
+﻿namespace APIEbeer.Data.Models
 {
     public class ResponseOptionsModel
     {
