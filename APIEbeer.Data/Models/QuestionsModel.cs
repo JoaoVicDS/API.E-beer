@@ -5,7 +5,7 @@ namespace APIEbeer.Data.Models
     public class QuestionsModel
     {
         public string Bitter { get; set; } = "Qual nível de amargor você prefere?";
-        public string Sweeet { get; set; } = "Qual nível de doçura você prefere?";
+        public string Sweet { get; set; } = "Qual nível de doçura você prefere?";
         public string AlcoholContent { get; set; } = "Qual o teor alcoólico que você prefere?";
         public string Flavor { get; set; } = "Qual o sabor que você prefere?";
         public string Texture { get; set; } = "Qual a textura que você prefere?";
@@ -26,7 +26,7 @@ namespace APIEbeer.Data.Models
             if (property == null)
                 return false;
 
-            return property.Name == characteristic;
+            return property.Name.Equals(characteristic, StringComparison.OrdinalIgnoreCase);
         }
     }
 

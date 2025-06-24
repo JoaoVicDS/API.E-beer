@@ -4,7 +4,7 @@ namespace APIEbeer.Services.Json
 {
     public class JsonService : IJsonService
     {
-        public (bool IsValid, string? ErrorMessage) ValidateJsonStructure(JsonViewModel? input)
+        public (bool IsValid, string? ErrorMessage) IsValidJsonStructure(JsonViewModel? input)
         {
             if (input == null)
                 return (false, "Objeto JSON nulo.");
@@ -34,11 +34,6 @@ namespace APIEbeer.Services.Json
             }
 
             return (true, null); // Estrutura válida
-        }
-
-        public void CacheSaving(JsonViewModel model)
-        {
-
         }
     }
 }

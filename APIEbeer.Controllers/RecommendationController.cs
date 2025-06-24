@@ -8,13 +8,14 @@ using Microsoft.AspNetCore.Mvc;
 namespace APIEbeer.Controllers
 {
     [ApiController]
+    [Route("api/recommendation")]
     public class RecommendationController(IRecommendationService recommendationService, ICacheService cacheService) : Controller
     {
         private readonly IRecommendationService _recommendationService = recommendationService;
         private readonly ICacheService _cacheService = cacheService;
 
-        [HttpGet("api/recommendation/index")]
-        public IActionResult Index([FromQuery] string formId)
+        [HttpGet]
+        public IActionResult GetRecommendation([FromQuery] string formId)
         {
             var recommendation = _cacheService.Get<RecommendationViewModel>($"formId:{formId}:RecommendationViewModel");
 
@@ -26,8 +27,8 @@ namespace APIEbeer.Controllers
             return Ok(recommendation);
         }
 
-        [HttpPost("api/recommendation/generate")]
-        public IActionResult GenerateRecommendation([FromBody] AnswersViewModel answers)
+        [HttpPost("create")]
+        public IActionResult CreateRecommendation([FromBody] AnswersViewModel answers)
         {
             if (answers == null)
                 return BadRequest("Não foi possível localizar as respostas enviadas pelo body.");
@@ -37,14 +38,14 @@ namespace APIEbeer.Controllers
             if (json == null)
                 return BadRequest($"Não foi possível localizar o JsonViewModel armazenado no cache com o formId: {answers.FormId}.");
 
-            RecommendationViewModel recommendation = _recommendationService.GenerateRecommendation(answers, json.Menu.Categories);
+            RecommendationViewModel recommendation = _recommendationService.CreateRecommendation(answers, json.Menu.Categories);
 
             if (recommendation == null)
                 return BadRequest($"Não foi possível gerar a recomendação.");
 
             _cacheService.Set<RecommendationViewModel>($"formId:{answers.FormId}:RecommendationViewModel", recommendation);
 
-            return Ok();
+            return RedirectToAction("GetRecommendation", new { answers.FormId });
         }   
     }
 }
