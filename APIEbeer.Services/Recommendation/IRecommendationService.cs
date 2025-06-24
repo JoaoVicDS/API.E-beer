@@ -6,6 +6,6 @@ namespace APIEbeer.Services.Recommendation
 {
     public interface IRecommendationService
     {
-        RecommendationViewModel GenerateRecommendation(AnswersViewModel answers, List<CategoryViewModel> categories);
+        RecommendationViewModel CreateRecommendation(AnswersViewModel answers, List<CategoryViewModel> categories);
     }
 }

@@ -1,20 +1,21 @@
 ﻿using APIEbeer.Data.Models;
-using APIEbeer.Shared.ViewModels;
 using APIEbeer.Shared.ViewModels.Answers;
 using APIEbeer.Shared.ViewModels.JSON;
 using APIEbeer.Shared.ViewModels.Recommendation;
+using APIEbeer.Services.Form;
 
 namespace APIEbeer.Services.Recommendation
 {
-    public class RecommendationService(ResponseOptionsModel responseOption) : IRecommendationService
+    public class RecommendationService(ResponseOptionsModel responseOption, IFormService formService) : IRecommendationService
     {
         private readonly ResponseOptionsModel _responseOption = responseOption;
+        private readonly IFormService _formService = formService;
 
-        public RecommendationViewModel GenerateRecommendation(AnswersViewModel answers, List<CategoryViewModel> categories)
+        public RecommendationViewModel CreateRecommendation(AnswersViewModel answers, List<CategoryViewModel> categories)
         {
             // Validate input parameters
-            if (answers == null)
-                throw new ArgumentNullException(nameof(answers), "Answers cannot be null.");
+            if (!_formService.IsValidAnswers(answers))
+                throw new ArgumentNullException(nameof(answers), "Answers is not valid.");
 
             if (categories == null)
                 throw new ArgumentNullException(nameof(categories), "Categories cannot be null.");
@@ -33,7 +34,7 @@ namespace APIEbeer.Services.Recommendation
                     throw new ArgumentException(nameof(category), $"Category {answersCategory.Name} not found in {categories}.");
 
                 // Create a recommendation for the category using the selected answers and items
-                RecommendationCategoryViewModel recommendationCategory = GenerateCategoryRecommendation(
+                RecommendationCategoryViewModel recommendationCategory = CreateCategoryRecommendation(
                     answersCategory.Name,
                     answersCategory.SelectedAnswers, 
                     category.Items);
@@ -57,7 +58,7 @@ namespace APIEbeer.Services.Recommendation
         }
 
         //Generate a recommendation for a specific category based on selected answers and items
-        private RecommendationCategoryViewModel GenerateCategoryRecommendation(string categoryName, List<SelectedAnswersViewModel> selectedAnswers, List<ItemViewModel> items)
+        private RecommendationCategoryViewModel CreateCategoryRecommendation(string categoryName, List<SelectedAnswersViewModel> selectedAnswers, List<ItemViewModel> items)
         {
             // Validate input parameters
             if (string.IsNullOrEmpty(categoryName))
@@ -78,19 +79,18 @@ namespace APIEbeer.Services.Recommendation
                 // Iterate through each item in the category
                 foreach (var item in items)
                 {
+                    var characteristicKeyLower = char.ToLower(answer.CharacteristicAsked[0]) + answer.CharacteristicAsked[1..];
+
                     // Validate the item characteristics and create a characteristic value if it exists
-                    if (!item.Characteristics.TryGetValue(answer.CharacteristicAsked, out var characteristicValue))
+                    if (!item.Characteristics.TryGetValue(characteristicKeyLower, out var characteristicValue))
                         continue;
 
                     // If the characteristic value is null, throw an exception
                     if (characteristicValue == null)
                         throw new ArgumentException(nameof(characteristicValue), $"Characteristic value for '{answer.CharacteristicAsked}' not found.");
 
-                    // Normalize the characteristic name to match the expected format
-                    var characteristic = char.ToUpper(answer.CharacteristicAsked[0]) + answer.CharacteristicAsked[1..];
-
                     // Get the options for the characteristic from the response options model
-                    List<string> options = _responseOption.GetOptionsByCharacteristic(characteristic);
+                    List<string> options = _responseOption.GetOptionsByCharacteristic(answer.CharacteristicAsked);
 
                     // If no options are found, throw an exception
                     if (options == null || options.Count == 0)
