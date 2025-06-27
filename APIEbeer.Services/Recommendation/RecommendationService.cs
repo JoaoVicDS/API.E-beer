@@ -134,14 +134,14 @@ namespace APIEbeer.Services.Recommendation
             {
                 recommendedItems.Add(new RecommendationItemViewModel
                 {
-                    Name = categoryName,
                     Recommendation = item
                 });
             }
 
             // Create and return the recommendation category view model with the best item
             return new RecommendationCategoryViewModel
-            { 
+            {
+                Name = categoryName,
                 Items = recommendedItems,
             };
         }
