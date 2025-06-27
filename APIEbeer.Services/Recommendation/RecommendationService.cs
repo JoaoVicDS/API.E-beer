@@ -119,35 +119,57 @@ namespace APIEbeer.Services.Recommendation
             }
 
             // Get the best item based on the scores
-            var bestItem = GetBestItem(itemsScored);
+            var bestItems = GetBestItems(itemsScored);
 
             // Check if the best item is null or empty
-            if (string.IsNullOrEmpty(bestItem))
-                bestItem = "Não recomendou nada";
+            if (bestItems.Count == 0)
+                for (int i = 1; i < 2; i++)
+                {
+                    bestItems.Add("Nenhuma Recomendação");
+                }
+
+            var recommendedItems = new List<RecommendationItemViewModel>();
+
+            foreach (var item in bestItems)
+            {
+                recommendedItems.Add(new RecommendationItemViewModel
+                {
+                    Recommendation = item
+                });
+            }
 
             // Create and return the recommendation category view model with the best item
             return new RecommendationCategoryViewModel
-            { 
+            {
                 Name = categoryName,
-                Recommendation = bestItem
+                Items = recommendedItems,
             };
         }
 
         // Get the best item from the scored items based on their scores
-        private string GetBestItem(Dictionary<string, float> itemsScored)
+        private List<string> GetBestItems(Dictionary<string, float> itemsScored)
         {
             // Validate input parameter
             if (itemsScored.Count == 0)
-                return string.Empty;
+                return [];
 
             // Find the item with the highest score
-            var bestItem = itemsScored.FirstOrDefault();
-            foreach (var item in itemsScored)
+            var bestItems = new List<string>();
+
+            for (int i = 0; i < 3; i++)
             {
-                bestItem = item.Value > bestItem.Value ? item : bestItem;
+                var bestItem = itemsScored.First();
+
+                foreach (var item in itemsScored)
+                {
+                    bestItem = item.Value > bestItem.Value ? item : bestItem;
+                }
+
+                bestItems.Add(bestItem.Key);
+                itemsScored.Remove(bestItem.Key);
             }
 
-            return bestItem.Key;
+            return bestItems;
         }
     }
 }
