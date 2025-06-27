@@ -1,9 +1,11 @@
-﻿namespace APIEbeer.Data.Models
+﻿using System.Reflection;
+
+namespace APIEbeer.Data.Models
 {
     public class QuestionsModel
     {
         public string Bitter { get; set; } = "Qual nível de amargor você prefere?";
-        public string Sweeet { get; set; } = "Qual nível de doçura você prefere?";
+        public string Sweet { get; set; } = "Qual nível de doçura você prefere?";
         public string AlcoholContent { get; set; } = "Qual o teor alcoólico que você prefere?";
         public string Flavor { get; set; } = "Qual o sabor que você prefere?";
         public string Texture { get; set; } = "Qual a textura que você prefere?";
@@ -17,5 +19,15 @@
         public string Spicy { get; set; } = "Qual o nível de ardência que você prefere?";
         public string Size { get; set; } = "Qual o tamanho que você prefere?";
         public string Volume { get; set; } = "Qual o volume que você prefere?";
+
+        public bool ValidateQuestionByCharacteristic(string characteristic)
+        {
+            var property = GetType().GetProperty(characteristic);
+            if (property == null)
+                return false;
+
+            return property.Name.Equals(characteristic, StringComparison.OrdinalIgnoreCase);
+        }
     }
+
 }

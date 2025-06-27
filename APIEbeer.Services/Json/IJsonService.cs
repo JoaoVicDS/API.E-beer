@@ -1,9 +1,9 @@
-using APIEbeer.Shared.ViewModels;
+using APIEbeer.Shared.ViewModels.JSON;
 
 namespace APIEbeer.Services.Json
 {
     public interface IJsonService
     {
-        public (bool IsValid, string? ErrorMessage) ValidateJsonStructure(JsonViewModel? input);
+        public (bool IsValid, string? ErrorMessage) IsValidJsonStructure(JsonViewModel? input);
     }
 }

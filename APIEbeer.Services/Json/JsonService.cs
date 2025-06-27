@@ -1,10 +1,10 @@
-using APIEbeer.Shared.ViewModels;
+using APIEbeer.Shared.ViewModels.JSON;
 
 namespace APIEbeer.Services.Json
 {
     public class JsonService : IJsonService
     {
-        public (bool IsValid, string? ErrorMessage) ValidateJsonStructure(JsonViewModel? input)
+        public (bool IsValid, string? ErrorMessage) IsValidJsonStructure(JsonViewModel? input)
         {
             if (input == null)
                 return (false, "Objeto JSON nulo.");
