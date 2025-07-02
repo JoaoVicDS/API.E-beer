@@ -2,7 +2,6 @@
 using APIEbeer.Shared.ViewModels.Answers;
 using APIEbeer.Shared.ViewModels.Form;
 using APIEbeer.Shared.ViewModels.JSON;
-using System.Reflection;
 
 namespace APIEbeer.Services.Form
 {
@@ -11,6 +10,7 @@ namespace APIEbeer.Services.Form
         // Constructor injection for QuestionsModel and OptionsResponseModel
         private readonly QuestionsModel _questionsModel = questionsModel;
         private readonly ResponseOptionsModel _responseOptionsModel = responseOptionsModel;
+        private readonly List<string> _questionsCreated = [];
 
         // Generates a dynamic form based on the characteristics of the provided model.
         public FormViewModel CreateDynamicForm(MenuViewModel model)
@@ -110,6 +110,9 @@ namespace APIEbeer.Services.Form
                 if (!questionsProperties.TryGetValue(characteristic.Key, out var questionProp))
                     continue; // Skip if no matching question property found
 
+                if (_questionsCreated.Contains(questionProp.Name))
+                    continue;
+
                 // Get the value of the question property
                 var questionText = questionProp.GetValue(_questionsModel)?.ToString();
                 if (string.IsNullOrWhiteSpace(questionText))
@@ -134,6 +137,8 @@ namespace APIEbeer.Services.Form
                     Question = questionText,
                     Options = options
                 });
+
+                _questionsCreated.Add(questionProp.Name);
 
             }
             return questions;
